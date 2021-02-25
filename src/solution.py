@@ -11,6 +11,7 @@ class Intersection():
         self.streets = streets
 
         self.total_time = sum([x[1] for x in streets])
+        self.streets_len = len(streets)
 
     def __str__(self):
         string = f"{self.id}\n{len(self.streets)}\n"
@@ -18,6 +19,29 @@ class Intersection():
             string += f"{x[0]} {x[1]}\n"
         return string
 
+    def init(self, problem):
+        problem.streets[self.streets[0][0]].is_green = True
+
+    def green_light(self, problem, current_time):
+        if self.streets_len == 1:
+            return
+
+        intersection_time = current_time % self.total_time
+
+        green_street: Street = None
+        current_loop_time = 0
+        for i, (street_name, green_time) in enumerate(self.streets):
+            current_loop_time += green_time
+            if current_loop_time > intersection_time:
+                break
+
+        green_street = problem.streets[self.streets[(i)%self.streets_len][0]]
+        red_street = problem.streets[self.streets[(i-1)%self.streets_len][0]]
+        print(f'int {self.id} green lighting {green_street.name}')
+        print(f'int {self.id} red lighting {red_street.name}')
+
+        green_street.is_green = True
+        red_street.is_green = False
 
 class Solution(NamedTuple):
     intersections: List[Intersection]

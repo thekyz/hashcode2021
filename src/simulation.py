@@ -7,22 +7,30 @@ from typing import List, Set, Dict, NamedTuple
 
 
 def simulation_loop(current_time: int, problem: Problem, solution: Solution):
-    cars_done = 0
-
     for intersection in solution.intersections:
-        pass
+        intersection.green_light(problem, current_time)
 
+    loop_score = 0
     for car in problem.cars:
-        cars_done += car.update()
+        if car.update():
+            loop_score += problem.score + (problem.duration - current_time)
 
-    return cars_done * problem.score
+    return loop_score
 
 
 def score_solution(problem: Problem, solution: Solution):
     current_time = 0
     score = 0
 
-    while current_time < problem.duration:
+    for intersection in solution.intersections:
+        intersection.init(problem)
+
+    for car in problem.cars:
+        car.init(problem)
+
+    print('------- init done')
+
+    while current_time <= problem.duration:
         print(f'======= loop {current_time}')
         loop_score = simulation_loop(current_time, problem, solution)
         score += loop_score
@@ -73,8 +81,10 @@ def main(file_to_read: Path, output_folder: Path):
 
     solution = Solution([intersection, intersection2, intersection3])
     score = score_solution(problem, solution)
-    print(f'total score: {score}')
     print('+++++ end simulation')
+    print()
+    print(f'total score: {score}')
+    print()
 
     #solution: Solution = calculate_solution()
 

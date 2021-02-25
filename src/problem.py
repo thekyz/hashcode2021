@@ -12,9 +12,12 @@ class Car():
     time_left_on_street: int
     current_street_index: int
 
+    done: bool
+
     def __init__(self, id, street_names, problem):
         self.id = id
         self.street_names = street_names
+        self.streets_len = len(self.street_names)
         self.problem = problem
 
         self.time_left_on_street = 0
@@ -22,17 +25,33 @@ class Car():
 
         self.current_street = problem.streets[self.street_names[self.current_street_index]]
 
+        self.done = False
+
+    def init(self, problem):
+        print(f'car {self.id} entering street {self.current_street.name}')
+        self.current_street.enter(self)
+
     def update(self):
+        if self.done:
+            return 0
+
         if not self.time_left_on_street:
             if self.current_street.can_leave(self):
                 # leave current street
+                print(f'car {self.id} leaving street {self.current_street.name}')
                 self.time_left_on_street = self.current_street.leave(self)
 
                 self.current_street_index += 1
+                if self.current_street_index >= self.streets_len:
+                    # car is done
+                    print(f'car {self.id} done')
+                    self.done = True
+                    return 1
+
                 self.current_street = self.problem.streets[self.street_names[self.current_street_index]]
-                print(f'car {self.id} entering street index {self.current_street.name}')
 
                 # enter next one
+                print(f'car {self.id} entering street {self.current_street.name}')
                 self.current_street.enter(self)
         else:
             self.time_left_on_street -= 1
