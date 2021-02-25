@@ -72,6 +72,9 @@ def main(file_to_read: Path, output_folder: Path):
             street_names: List[str] = split_line[1:]
             car_list.append(Car(i, street_names, problem))
 
+    all_intersections = problem.get_intersections(amt_intersections)
+    print(all_intersections)
+
     print(street_dict)
     print(car_list)
 

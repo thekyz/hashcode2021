@@ -1,6 +1,8 @@
 from typing import List, NamedTuple, Dict, Optional, Deque
 from collections import deque
 
+from solution import Intersection
+
 class Problem():
     pass
 
@@ -99,3 +101,12 @@ class Problem(NamedTuple):
     score: int
     streets: Dict[str, Street] = {}
     cars: List[Car] = list()
+
+    def get_intersections(self, amt_intersections):
+        intersections = [Intersection(i, []) for i in range(amt_intersections)]
+        for _,street in self.streets.items():
+            intersections[street.end_id].streets.append((street.name, 0))
+
+        return intersections
+
+
