@@ -1,4 +1,5 @@
-from typing import List, NamedTuple, Dict, Optional
+from typing import List, NamedTuple, Dict, Optional, Deque
+from collections import deque
 
 class Problem():
     pass
@@ -45,7 +46,7 @@ class Street():
     start_id: int
     end_id: int
 
-    car_queue: List[Car]
+    car_queue: Deque[Car]
     is_green: bool
 
     def __init__(self, name, time_to_cross, start_id, end_id):
@@ -54,15 +55,17 @@ class Street():
         self.start_id = start_id
         self.end_id = end_id
 
-        self.car_queue = []
+        self.car_queue = deque()
         self.is_green = False
 
 
     def leave(self, car):
-        self.car_queue.pop(0)
+        # remove from the right of the dequ
+        self.car_queue.pop()
 
     def enter(self, car):
-        self.car_queue.append(car)
+        # append to the left of the deque
+        self.car_queue.appendleft(car)
         return self.time_to_cross
 
     def can_leave(self, car):
