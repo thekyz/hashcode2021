@@ -84,7 +84,6 @@ def main(file_to_read: Path, output_folder: Path):
     log.info(f"reading {file_to_read}")
     street_dict: Dict[str, Street] = {}
     car_list: List[Car] = []
-    problem = Problem(duration=6, score=1000, streets=street_dict, cars=car_list)
     with file_to_read.open() as ftr:
         duration: int
         amt_intersections: int
@@ -92,6 +91,7 @@ def main(file_to_read: Path, output_folder: Path):
         amt_cars: int
         bonus_points: int
         duration, amt_intersections, amt_streets, amt_cars, bonus_points = map(int, ftr.readline().strip().split(" "))
+        problem = Problem(duration=duration, score=bonus_points, streets=street_dict, cars=car_list)
         for i in range(amt_streets):
             split_line: List[str] = ftr.readline().strip().split(" ")
             start_intersection_id: int
