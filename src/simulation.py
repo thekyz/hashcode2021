@@ -117,15 +117,21 @@ def main(file_to_read: Path, output_folder: Path):
     all_intersections = problem.get_intersections(amt_intersections)
     log.debug(all_intersections)
 
-    solution = Solution(generate_solution(all_intersections))
-    score = score_solution(problem, solution)
-    log.info('+++++ end simulation')
+    final_solution = None
+    max_score = 0
+    for i in range(10000):
+        solution = Solution(generate_solution(all_intersections))
+        score = score_solution(problem, solution)
+        if score > max_score:
+            final_solution = solution
+            max_score = score
+    print('+++++ end simulation')
     print()
-    log.info(f'total score: {score}')
+    print(f'total score: {max_score}')
     print()
 
     output_file = output_folder.joinpath(file_to_read.stem + '_output.txt') 
-    solution.write_output(output_file)
+    final_solution.write_output(output_file)
 
 if __name__ == '__main__':
     current_file = Path(sys.argv[1])
