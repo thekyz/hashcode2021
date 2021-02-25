@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import random
 from problem import Car, Street, Problem
 from solution import Solution, Intersection
 from pathlib import Path
@@ -39,6 +40,28 @@ def score_solution(problem: Problem, solution: Solution):
 
     return score
 
+INTERSECTION_RATE = .5
+ACTIVE_STREET_RATE = .5
+AVERAGE_GREEN_TIME = 3
+VARIANCE_GREEN_TIME = 2
+
+
+def generate_solution(all_intersections):
+    result = []
+    for intersection in all_intersections:
+        if random.random() > INTERSECTION_RATE:
+            streets = [random.choice(intersection.streets)]
+        else:
+            streets = []
+            for street in intersection.streets:
+                if random.random() < ACTIVE_STREET_RATE:
+                    streets.append(street)
+
+        for street in streets:
+            street_time = max(1, AVERAGE_GREEN_TIME + random.random() * VARIANCE_GREEN_TIME)
+            result.append((street, street_time))
+    return result
+
 
 def main(file_to_read: Path, output_folder: Path):
     """
@@ -72,18 +95,15 @@ def main(file_to_read: Path, output_folder: Path):
             street_names: List[str] = split_line[1:]
             car_list.append(Car(i, street_names, problem))
 
-    all_intersections = problem.get_intersections(amt_intersections)
-    print(all_intersections)
-
     print(street_dict)
     print(car_list)
 
     print('+++++ start simulation')
-    intersection = Intersection(1, [("rue-d-athenes", 2), ("rue-d-amsterdam", 1)])
-    intersection2 = Intersection(0, [("rue-de-londres", 2)])
-    intersection3 = Intersection(2, [("rue-de-moscou", 1)])
 
-    solution = Solution([intersection, intersection2, intersection3])
+    all_intersections = problem.get_intersections(amt_intersections)
+    print(all_intersections)
+
+    solution = Solution(generate_solution(all_intersections))
     score = score_solution(problem, solution)
     print('+++++ end simulation')
     print()
