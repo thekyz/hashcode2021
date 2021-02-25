@@ -1,7 +1,12 @@
+import logging
+
 from typing import List, NamedTuple, Dict, Optional, Deque
 from collections import deque
 
 from solution import Intersection
+
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
 
 class Problem():
     pass
@@ -30,7 +35,7 @@ class Car():
         self.done = False
 
     def init(self, problem):
-        print(f'car {self.id} entering street {self.current_street.name}')
+        log.debug(f'car {self.id} entering street {self.current_street.name}')
         self.current_street.enter(self)
 
     def update(self):
@@ -40,20 +45,20 @@ class Car():
         if not self.time_left_on_street:
             if self.current_street.can_leave(self):
                 # leave current street
-                print(f'car {self.id} leaving street {self.current_street.name}')
+                log.debug(f'car {self.id} leaving street {self.current_street.name}')
                 self.time_left_on_street = self.current_street.leave(self)
 
                 self.current_street_index += 1
                 if self.current_street_index >= self.streets_len:
                     # car is done
-                    print(f'car {self.id} done')
+                    log.debug(f'car {self.id} done')
                     self.done = True
                     return 1
 
                 self.current_street = self.problem.streets[self.street_names[self.current_street_index]]
 
                 # enter next one
-                print(f'car {self.id} entering street {self.current_street.name}')
+                log.debug(f'car {self.id} entering street {self.current_street.name}')
                 self.current_street.enter(self)
         else:
             self.time_left_on_street -= 1

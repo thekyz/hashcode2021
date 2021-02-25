@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 import sys
+import logging
 import random
+
 from problem import Car, Street, Problem
 from solution import Solution, Intersection
 from pathlib import Path
 from typing import List, Set, Dict, NamedTuple
 
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
 
 def simulation_loop(current_time: int, problem: Problem, solution: Solution):
     for intersection in solution.intersections:
@@ -30,10 +34,10 @@ def score_solution(problem: Problem, solution: Solution):
     for car in problem.cars:
         car.init(problem)
 
-    print('------- init done')
+    log.info('------- init done')
 
     while current_time <= problem.duration:
-        print(f'======= loop {current_time}')
+        log.debug(f'======= loop {current_time}')
         loop_score = simulation_loop(current_time, problem, solution)
         score += loop_score
         current_time += 1
@@ -77,12 +81,7 @@ def main(file_to_read: Path, output_folder: Path):
     """
     Main function of program
     """
-    print()
-    print()
-    print()
-    print()
-    print()
-    print(f"reading {file_to_read}")
+    log.info(f"reading {file_to_read}")
     street_dict: Dict[str, Street] = {}
     car_list: List[Car] = []
     problem = Problem(duration=6, score=1000, streets=street_dict, cars=car_list)
@@ -110,19 +109,19 @@ def main(file_to_read: Path, output_folder: Path):
             street_names: List[str] = split_line[1:]
             car_list.append(Car(i, street_names, problem))
 
-    print(street_dict)
-    print(car_list)
+    log.debug(street_dict)
+    log.debug(car_list)
 
-    print('+++++ start simulation')
+    log.info('+++++ start simulation')
 
     all_intersections = problem.get_intersections(amt_intersections)
-    print(all_intersections)
+    log.debug(all_intersections)
 
     solution = Solution(generate_solution(all_intersections))
     score = score_solution(problem, solution)
-    print('+++++ end simulation')
+    log.info('+++++ end simulation')
     print()
-    print(f'total score: {score}')
+    log.info(f'total score: {score}')
     print()
 
     output_file = output_folder.joinpath(file_to_read.stem + '_output.txt') 
@@ -131,4 +130,5 @@ def main(file_to_read: Path, output_folder: Path):
 if __name__ == '__main__':
     current_file = Path(sys.argv[1])
     output_folder = Path(sys.argv[2])
+    
     main(current_file, output_folder)
