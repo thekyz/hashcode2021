@@ -1,9 +1,17 @@
 from typing import List, Set, NamedTuple, Tuple
 
 
-class Intersection(NamedTuple):
+class Intersection():
     id: int
     streets: List[Tuple[str, int]]
+
+    def __init__(self, id, streets):
+        self.id = id
+        self.streets = streets
+
+        self.total_time = 0
+        for s, time_to_cross in streets:
+            self.total_time += time_to_cross
 
     def __str__(self):
         string = f"{self.id}\n{len(self.streets)}\n"

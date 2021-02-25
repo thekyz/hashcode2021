@@ -1,21 +1,30 @@
 #!/usr/bin/env python3
 import sys
-from problem import Problem
-from street import Street
-from car import Car
+from problem import Car, Street, Problem
+from solution import Solution, Intersection
 from pathlib import Path
 from typing import List, Set, Dict, NamedTuple
 
 
-def simulation_loop():
-    return 0
+def simulation_loop(current_time: int, problem: Problem, solution: Solution):
+    cars_done = 0
+
+    for intersection in solution.intersections:
+        pass
+
+    for car in problem.cars:
+        cars_done += car.update()
+
+    return cars_done * problem.score
 
 
-def score_solution(problem: Problem):
+def score_solution(problem: Problem, solution: Solution):
     current_time = 0
     score = 0
+
     while current_time < problem.duration:
-        loop_score = simulation_loop()
+        print(f'======= loop {current_time}')
+        loop_score = simulation_loop(current_time, problem, solution)
         score += loop_score
         current_time += 1
 
@@ -29,6 +38,7 @@ def main(file_to_read: Path, output_folder: Path):
     print(f"reading {file_to_read}")
     street_dict: Dict[str, Street] = {}
     car_list: List[Car] = []
+    problem = Problem(duration=6, score=1000, streets=street_dict, cars=car_list)
     with file_to_read.open() as ftr:
         duration: int
         amt_intersections: int
@@ -46,21 +56,23 @@ def main(file_to_read: Path, output_folder: Path):
             street_dict[street_name] = Street(street_name, start_intersection_id, end_intersection_id, street_time)
 
         # paths of the cars
-        car_info: List[Car]
         for i in range(amt_cars):
             split_line: List[str] = ftr.readline().strip().split(" ")
             # The car stas at the end of the first street
             amt_streets_for_car: int = int(split_line[0])
             street_names: List[str] = split_line[1:]
-            car_list.append(Car(i, street_names))
+            car_list.append(Car(i, street_names, problem))
 
     print(street_dict)
     print(car_list)
 
-    problem = Problem(duration=6, score=1000)#, street=streets, cars=cars)
     print('+++++ start simulation')
-    #solution: Solution = Solution()
-    score = score_solution(problem)
+    intersection = Intersection(1, [("rue-d-athenes", 2), ("rue-d-amsterdam", 1)])
+    intersection2 = Intersection(0, [("rue-de-londres", 2)])
+    intersection3 = Intersection(2, [("rue-de-moscou", 1)])
+
+    solution = Solution([intersection, intersection2, intersection3])
+    score = score_solution(problem, solution)
     print(f'total score: {score}')
     print('+++++ end simulation')
 
