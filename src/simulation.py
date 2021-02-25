@@ -11,6 +11,7 @@ def simulation_loop(current_time: int, problem: Problem, solution: Solution):
         intersection.green_light(problem, current_time)
 
     loop_score = 0
+
     for car in problem.cars:
         if car.update():
             loop_score += problem.score + (problem.duration - current_time)
@@ -88,18 +89,8 @@ def main(file_to_read: Path, output_folder: Path):
 
     #solution: Solution = calculate_solution()
 
-    #output_file = output_folder.joinpath(file_to_read.stem + '_output.txt') 
-    #print(f"writing to: {output_file}")
-    #if not output_folder.exists():
-    #    output_folder.mkdir(parents=True)
-    #    print(f"Created output folder {output_folder}")
-
-    #with output_file.open('w') as ftw:
-    #    ftw.write('someline')
-    #    ftw.write('someline 2\n')
-    #    ftw.write('someline 3')
-    #    ftw.write('\n')
-    #    ftw.write('end\n')
+    output_file = output_folder.joinpath(file_to_read.stem + '_output.txt') 
+    #solution.write_output(output_file)
 
 if __name__ == '__main__':
     current_file = Path(sys.argv[1])

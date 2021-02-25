@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List, Set, NamedTuple, Tuple
 
 
@@ -46,11 +47,14 @@ class Intersection():
 class Solution(NamedTuple):
     intersections: List[Intersection]
 
-    def write_output(self, filename):
-        with open(filename, "w") as file:
-            file.write(f"{len(self.intersections)}\n")
+    def write_output(self, filepath: Path):
+        output_folder: Path = filepath.parent
+        if not output_folder.exists():
+            output_folder.mkdir(parents=True)
+        with filepath.open("w") as fp:
+            fp.write(f"{len(self.intersections)}\n")
             for intersection in self.intersections:
-                file.write(str(intersection))
+                fp.write(str(intersection))
 
 
 if __name__ == "__main__":
