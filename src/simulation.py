@@ -2,6 +2,8 @@
 import sys
 import logging
 import random
+from functools import partial
+from multiprocessing import Pool
 
 from problem import Car, Street, Problem
 from solution import Solution, Intersection
@@ -119,9 +121,11 @@ def main(file_to_read: Path, output_folder: Path):
 
     final_solution = None
     max_score = 0
-    for i in range(10000):
-        solution = Solution(generate_solution(all_intersections))
-        score = score_solution(problem, solution)
+    with Pool(9) as p:
+        f = partial(analyze_data, all_intersections, problem)
+        results = p.map(f, [0]*10000)
+
+    for solution, score in results:
         if score > max_score:
             final_solution = solution
             max_score = score
@@ -132,6 +136,12 @@ def main(file_to_read: Path, output_folder: Path):
 
     output_file = output_folder.joinpath(file_to_read.stem + '_output.txt') 
     final_solution.write_output(output_file)
+
+def analyze_data(all_intersections, problem, data):
+    solution = Solution(generate_solution(all_intersections))
+    score = score_solution(problem, solution)
+
+    return solution, score
 
 if __name__ == '__main__':
     current_file = Path(sys.argv[1])
