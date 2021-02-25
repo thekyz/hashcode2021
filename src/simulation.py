@@ -110,10 +110,8 @@ def main(file_to_read: Path, output_folder: Path):
     print(f'total score: {score}')
     print()
 
-    #solution: Solution = calculate_solution()
-
     output_file = output_folder.joinpath(file_to_read.stem + '_output.txt') 
-    #solution.write_output(output_file)
+    solution.write_output(output_file)
 
 if __name__ == '__main__':
     current_file = Path(sys.argv[1])
