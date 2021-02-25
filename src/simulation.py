@@ -41,7 +41,7 @@ def score_solution(problem: Problem, solution: Solution):
     return score
 
 INTERSECTION_RATE = .5
-ACTIVE_STREET_RATE = .5
+ACTIVE_STREET_RATE = 1.0
 AVERAGE_GREEN_TIME = 3
 VARIANCE_GREEN_TIME = 2
 
@@ -49,6 +49,9 @@ VARIANCE_GREEN_TIME = 2
 def generate_solution(all_intersections):
     result = []
     for intersection in all_intersections:
+        if not intersection.streets:
+            continue
+
         if random.random() > INTERSECTION_RATE:
             streets = [random.choice(intersection.streets)]
         else:
@@ -57,9 +60,16 @@ def generate_solution(all_intersections):
                 if random.random() < ACTIVE_STREET_RATE:
                     streets.append(street)
 
-        for street in streets:
-            street_time = max(1, AVERAGE_GREEN_TIME + random.random() * VARIANCE_GREEN_TIME)
-            result.append((street, street_time))
+        if not streets:
+            streets = [random.choice(intersection.streets)]
+
+        intersection_result = []
+        for street, _ in streets:
+            street_time = int(max(1, AVERAGE_GREEN_TIME + random.random() * VARIANCE_GREEN_TIME))
+            intersection_result.append((street, street_time))
+
+        result.append(Intersection(intersection.id, intersection_result))
+
     return result
 
 
@@ -67,6 +77,11 @@ def main(file_to_read: Path, output_folder: Path):
     """
     Main function of program
     """
+    print()
+    print()
+    print()
+    print()
+    print()
     print(f"reading {file_to_read}")
     street_dict: Dict[str, Street] = {}
     car_list: List[Car] = []

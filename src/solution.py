@@ -21,6 +21,7 @@ class Intersection():
         return string
 
     def init(self, problem):
+        print(f'int {self.id} has streets {self.streets}')
         problem.streets[self.streets[0][0]].is_green = True
 
     def green_light(self, problem, current_time):
