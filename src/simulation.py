@@ -100,7 +100,7 @@ def main(file_to_read: Path, output_folder: Path):
             start_intersection_id, end_intersection_id = map(int, split_line[:2])
             street_name = split_line[2]
             street_time = int(split_line[3])
-            street_dict[street_name] = Street(street_name, start_intersection_id, end_intersection_id, street_time)
+            street_dict[street_name] = Street(street_name, street_time, start_intersection_id, end_intersection_id)
 
         # paths of the cars
         for i in range(amt_cars):

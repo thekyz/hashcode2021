@@ -6,21 +6,21 @@ class Intersection():
     id: int
     streets: List[Tuple[str, int]]
     total_time: int
+    streets_len: int
 
-    def __init__(self, id, streets):
+    def __init__(self, id: int, streets: List[Tuple[str, int]]):
         self.id = id
         self.streets = streets
-
         self.total_time = sum([x[1] for x in streets])
         self.streets_len = len(streets)
 
-    def __str__(self):
+    def __str__(self) -> str:
         string = f"{self.id}\n{len(self.streets)}\n"
         for x in self.streets:
             string += f"{x[0]} {x[1]}\n"
         return string
 
-    def init(self, problem):
+    def init(self, problem: Problem) -> None:
         print(f'int {self.id} has streets {self.streets}')
         problem.streets[self.streets[0][0]].is_green = True
 
