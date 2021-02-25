@@ -2,6 +2,9 @@ import sys
 from pathlib import Path
 from typing import List, Set, NamedTuple
 
+def calculate_score(cars, points, duration):
+    sum([points + (duration - x.time)] for x in cars if x.time < duration)
+
 def main(file_to_read: Path, output_folder: Path):
     """
     Main function of program
