@@ -1,5 +1,6 @@
 from typing import List, NamedTuple
+from street import Street
 
 def Car(NamedTuple):
-    index: int
+    idx: int
     path: List[Street]
