@@ -1,17 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Set, NamedTuple
-
-class Book(NamedTuple):
-    id: int
-    score: int
-
-class Library(NamedTuple):
-    id: int
-    signup_time_days: int
-    bookscans_per_day: int
-    books: Set[Book] = set()
-    allowed_to_scan_books: bool = False
+from typing import List, Set, NamedTuple
 
 def main(file_to_read: Path, output_folder: Path):
     """
