@@ -10,7 +10,7 @@ ARCHIVE := code.zip
 all: code.zip $(OUTPUTS)
 
 outputs/%.txt: inputs/%.txt $(SRCS)
-	python3 src/simulation.py $< $@
+	python3 src/simulation.py $< outputs
 
 code.zip: $(SRCS)
 	zip -r $@ $?
