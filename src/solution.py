@@ -2,7 +2,6 @@ import logging
 
 from pathlib import Path
 from typing import List, Set, NamedTuple, Tuple
-from problem import Car, Street, Problem
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -29,7 +28,7 @@ class Intersection():
         log.debug(f'int {self.id} has streets {self.streets}')
         problem.streets[self.streets[0][0]].is_green = True
 
-    def green_light(self, problem: Problem, current_time: int) -> None:
+    def green_light(self, problem, current_time: int) -> None:
         if self.streets_len == 1:
             return
 

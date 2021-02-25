@@ -34,7 +34,7 @@ def score_solution(problem: Problem, solution: Solution):
     for car in problem.cars:
         car.init(problem)
 
-    log.info('------- init done')
+    #log.info('------- init done')
 
     while current_time <= problem.duration:
         log.debug(f'======= loop {current_time}')
