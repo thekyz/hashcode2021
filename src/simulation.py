@@ -123,7 +123,7 @@ def main(file_to_read: Path, output_folder: Path):
     max_score = 0
     with Pool(9) as p:
         f = partial(analyze_data, all_intersections, problem)
-        results = p.map(f, [0]*10000)
+        results = p.map(f, [0]*9)
 
     for solution, score in results:
         if score > max_score:
